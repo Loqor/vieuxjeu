@@ -1,0 +1,44 @@
+{
+	"schemaVersion": 1,
+	"id": "vieuxjeu",
+	"version": "${version}",
+	"name": "Vieux Jeu",
+	"description": "Vieux Jeu (meaning \"Old Game\" in French), is a Minecraft mod dedicated to my love of arcade cabinet gaming and carnival games like the claw game!",
+	"authors": [
+		"Loqor",
+		"Bug1312",
+		"Jayson.json",
+		"Duzo",
+		"ranafangirl"
+	],
+	"contact": {
+		"homepage": "https://loqor.dev/",
+		"sources": "https://github.com/Loqor/vieuxjeu"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/vieuxjeu/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.loqor.VieuxJeu"
+		],
+		"client": [
+			"com.loqor.client.VieuxJeuClient"
+		],
+		"fabric-datagen": [
+			"com.loqor.VieuxJeuDataGenerator"
+		]
+	},
+	"mixins": [
+		"vieuxjeu.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": "~1.21-",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
