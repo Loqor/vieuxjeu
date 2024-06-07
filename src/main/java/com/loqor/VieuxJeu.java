@@ -18,14 +18,9 @@ import org.slf4j.LoggerFactory;
 public class VieuxJeu implements ModInitializer {
 	public static final String MOD_ID = "vieuxjeu";
 	public static final Logger VJ_LOGGER = LoggerFactory.getLogger("vieuxjeu");
-	public static final ItemGroup VIEUX_JEU_ITEM_GROUP = FabricItemGroup.builder()
-			.icon(() -> new ItemStack(VJItems.TEST))
-			.displayName(Text.translatable("itemGroup" + MOD_ID))
-			.build();
 
 	@Override
 	public void onInitialize() {
-		Registry.register(Registries.ITEM_GROUP, Identifier.of(VieuxJeu.MOD_ID, "item_group"), VIEUX_JEU_ITEM_GROUP);
 		VJItems.initialize();
 		VJBlocks.initialize();
 		VJBlockEntityTypes.initialize();
