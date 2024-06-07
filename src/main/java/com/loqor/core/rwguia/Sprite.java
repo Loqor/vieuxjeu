@@ -26,7 +26,7 @@ public class Sprite implements CanvasObject {
     }
 
     @Override
-    public void render(WorldRenderContext context) {
+    public void render(WorldRenderContext context, Canvas canvas) {
         CanvasObject.drawTextureInWorld(context.matrixStack(), context.consumers(), RenderLayer.getEntityCutout(getTexture()), 15728880);
     }
 

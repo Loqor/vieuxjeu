@@ -23,7 +23,7 @@
 			"com.loqor.VieuxJeu"
 		],
 		"client": [
-			"com.loqor.client.VieuxJeuClient"
+			"com.loqor.client.VJModClient"
 		],
 		"fabric-datagen": [
 			"com.loqor.VieuxJeuDataGenerator"

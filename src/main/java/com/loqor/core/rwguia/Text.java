@@ -6,11 +6,11 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.util.Identifier;
 import org.joml.Vector2f;
 
-public class Text implements CanvasObject{
+public class Text implements CanvasObject {
 
 
     @Override
-    public void render(WorldRenderContext context) {
+    public void render(WorldRenderContext context, Canvas canvas) {
         MinecraftClient.getInstance().textRenderer.draw(net.minecraft.text.Text.literal(""), getPosition().x, getPosition().y, 0xFFFFFFFF, false, context.matrixStack().peek().getPositionMatrix(), context.consumers(), TextRenderer.TextLayerType.POLYGON_OFFSET, 0x0, 15728880);
     }
 

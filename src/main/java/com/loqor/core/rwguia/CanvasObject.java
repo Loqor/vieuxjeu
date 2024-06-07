@@ -15,7 +15,7 @@ import java.awt.*;
 
 public interface CanvasObject {
 
-    void render(WorldRenderContext context);
+    void render(WorldRenderContext context, Canvas canvas);
     Vector2f getPosition();
     Identifier getTexture();
 
