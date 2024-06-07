@@ -1,19 +1,20 @@
 package com.loqor.core.rwguia;
 
-import java.util.ArrayList;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
+
 import java.util.HashMap;
 
 public class Canvas {
 
     /*
             String is the id for indexing,
-            GraphicalObject is the object to render
+            CanvasObject is the object to render
      */
-    private HashMap<String, GraphicalObject> objects = new HashMap<>();
+    private HashMap<String, CanvasObject> objects = new HashMap<>();
 
-    public void render() {
-        for (GraphicalObject value : objects.values()) {
-            value.render();
+    public void render(WorldRenderContext context) {
+        for (CanvasObject value : objects.values()) {
+            value.render(context);
         }
     }
 
