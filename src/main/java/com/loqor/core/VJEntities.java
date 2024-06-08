@@ -17,5 +17,5 @@ public final class VJEntities {
 		return Registry.register(Registries.ENTITY_TYPE, Identifier.of(VieuxJeu.MOD_ID, name), entityType);
 	}
 
-	public static final EntityType<PunchGameEntity> PUNCH_GAME = VJEntities.register(EntityType.Builder.create(PunchGameEntity::new, SpawnGroup.MISC).dimensions(0.5F, 0.5F).build(), "punch_game");
+	public static final EntityType<PunchGameEntity> PUNCH_GAME = VJEntities.register(EntityType.Builder.create(PunchGameEntity::new, SpawnGroup.MISC).dimensions(8/16F, 10/16F).build(), "punch_game");
 }

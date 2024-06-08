@@ -3,6 +3,7 @@ package com.loqor.core.entities;
 import org.jetbrains.annotations.Nullable;
 
 import com.loqor.core.blockentities.PunchGameBlockEntity;
+import com.loqor.core.blockentities.TicketReturningBlockEntity;
 
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
@@ -21,10 +22,10 @@ import net.minecraft.world.World;
 public class PunchGameEntity extends Entity {
 
 	private static final TrackedData<BlockPos> BLOCK_ENTITY_POS = DataTracker.registerData(PunchGameEntity.class, TrackedDataHandlerRegistry.BLOCK_POS);
-	public static final String NBT_KEY_POS = "Pos";
+	public static final String NBT_KEY_POS = "BlockPos";
 
 	@Nullable
-	private BlockPos pos;
+	public BlockPos blockPos;
 
 	public PunchGameEntity(EntityType<?> type, World world) {
 		super(type, world);
@@ -35,15 +36,15 @@ public class PunchGameEntity extends Entity {
 	
 	@Override
 	public boolean damage(DamageSource source, float amount) {
-		if (this.pos == null) return false;
+		if (this.blockPos == null) return false;
 		
 		final World world = this.getWorld();
-		final BlockEntity be = world.getBlockEntity(this.pos);
+		final BlockEntity be = world.getBlockEntity(this.blockPos);
 		
-		if (this.pos != null && !world.isClient() && be != null && be instanceof PunchGameBlockEntity) {
+		if (this.blockPos != null && !world.isClient() && be != null && be instanceof TicketReturningBlockEntity) {
 			final int tickets = (int) (Math.max(0, Math.ceil(amount - 1.5)) * 10);
-			((PunchGameBlockEntity) be).giveTickets(tickets);
-			
+			((TicketReturningBlockEntity) be).giveTickets(tickets);
+			// TODO: Play a sound or smthn, as well as animations
 			return true;
 		}
 		
@@ -52,10 +53,9 @@ public class PunchGameEntity extends Entity {
 	
 	@Override
 	public void tick() {
-		if (!this.getWorld().isClient() && (
-			this.pos == null ||
-			this.getWorld().getBlockEntity(this.pos) == null ||
-			!(this.getWorld().getBlockEntity(this.pos) instanceof PunchGameBlockEntity)
+		if (!this.getWorld().isClient() && this.blockPos != null && (
+			this.getWorld().getBlockEntity(this.blockPos) == null ||
+			!(this.getWorld().getBlockEntity(this.blockPos) instanceof PunchGameBlockEntity)
 		)) this.kill();
 		
 		super.tick();
@@ -69,13 +69,13 @@ public class PunchGameEntity extends Entity {
 	@Override
 	protected void readCustomDataFromNbt(NbtCompound nbt) {
 		if (nbt.contains(NBT_KEY_POS, NbtElement.COMPOUND_TYPE))
-			NbtHelper.toBlockPos(nbt, NBT_KEY_POS).filter(World::isValid).ifPresent(pos -> this.pos = pos);
+			NbtHelper.toBlockPos(nbt, NBT_KEY_POS).filter(World::isValid).ifPresent(pos -> this.blockPos = pos);
 	}
 
 	@Override
 	protected void writeCustomDataToNbt(NbtCompound nbt) {
-		if (this.pos != null)
-			nbt.put(NBT_KEY_POS, NbtHelper.fromBlockPos(this.pos));
+		if (this.blockPos != null)
+			nbt.put(NBT_KEY_POS, NbtHelper.fromBlockPos(this.blockPos));
 	}
 
 }
