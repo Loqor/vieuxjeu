@@ -28,7 +28,7 @@ public class Sprite implements CanvasObject {
     @Override
     public void render(WorldRenderContext context, Canvas canvas) {
         context.matrixStack().push();
-        context.matrixStack().translate(canvas.get2DPosition().getX() + getPosition().x,canvas.get2DPosition().getX() + getPosition().y, canvas.get2DPosition().getX() + getPosition().x);
+        context.matrixStack().translate(canvas.get2DPosition().getX() + getPosition().x,canvas.get2DPosition().getY() + getPosition().y, canvas.get2DPosition().getX() + getPosition().x);
         CanvasObject.drawTextureInWorld(context.matrixStack(), context.consumers(), RenderLayer.getEntityCutout(getTexture()), 15728880);
         context.matrixStack().pop();
     }
