@@ -14,7 +14,6 @@ public class VJItems {
     public static void initialize() {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.REDSTONE).register(entries -> {
                 entries.add(TEST);
-                entries.add(VJBlocks.TEST_BLOCK.asItem());
         });
     }
 
