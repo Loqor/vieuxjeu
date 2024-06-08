@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
@@ -31,6 +32,11 @@ public class Sprite implements CanvasObject {
         context.matrixStack().translate(canvas.get2DPosition().getX() + getPosition().x,canvas.get2DPosition().getY() + getPosition().y, canvas.get2DPosition().getX() + getPosition().x);
         CanvasObject.drawTextureInWorld(context.matrixStack(), context.consumers(), RenderLayer.getEntityCutout(getTexture()), 15728880);
         context.matrixStack().pop();
+    }
+
+    @Override
+    public void render(MatrixStack stack, VertexConsumerProvider provider, @Nullable Canvas canvas) {
+        CanvasObject.drawTextureInWorld(stack, provider, RenderLayer.getEntityCutout(getTexture()), 15728880);
     }
 
     @Override

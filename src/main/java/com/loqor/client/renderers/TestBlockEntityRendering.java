@@ -2,6 +2,7 @@ package com.loqor.client.renderers;
 
 import com.loqor.VieuxJeu;
 import com.loqor.core.blockentities.TestBlockEntity;
+import com.loqor.core.rwguia.Sprite;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
@@ -13,6 +14,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 
 import static net.minecraft.client.MinecraftClient.IS_SYSTEM_MAC;
 
@@ -31,7 +33,7 @@ public class TestBlockEntityRendering<T extends TestBlockEntity> implements Bloc
         //matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(camera.getYaw() + 180.0F));
         matrices.translate(transformedPosition.x, transformedPosition.y, transformedPosition.z);
 
-        Framebuffer buffer = this.render(MinecraftClient.getInstance().getFramebuffer());
+        Framebuffer buffer = this.render(matrices, vertexConsumers, MinecraftClient.getInstance().getFramebuffer());
 
         Matrix4f positionMatrix = matrices.peek().getPositionMatrix();
         Tessellator tessellator = Tessellator.getInstance();
@@ -49,7 +51,7 @@ public class TestBlockEntityRendering<T extends TestBlockEntity> implements Bloc
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 
     }
-    public Framebuffer render(Framebuffer mcFramebuffer) {
+    public Framebuffer render(MatrixStack stack, VertexConsumerProvider provider, Framebuffer mcFramebuffer) {
         if(this.framebuffer == null)
             this.framebuffer = new SimpleFramebuffer(mcFramebuffer.viewportWidth, mcFramebuffer.viewportHeight, true, IS_SYSTEM_MAC);
 
@@ -61,7 +63,10 @@ public class TestBlockEntityRendering<T extends TestBlockEntity> implements Bloc
 
         // Add rendering code here
         RenderSystem.setShaderTexture(0, Identifier.of(VieuxJeu.MOD_ID, "/textures/item/test.png"));
-        RenderSystem.setShaderColor(1f, 0f, 0f, 1f);
+        RenderSystem.setShaderColor(0f, 0.1f, 0f, 1f);
+        Sprite sprite = new Sprite(Identifier.of(VieuxJeu.MOD_ID, "/textures/item/test.png"));
+        sprite.setPosition(new Vector2f(0, 0));
+        sprite.render(stack, provider, null);
         framebuffer.endWrite();
 
         // render the framebuffer
