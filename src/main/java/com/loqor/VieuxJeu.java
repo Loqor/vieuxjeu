@@ -2,6 +2,7 @@ package com.loqor;
 
 import com.loqor.core.VJBlockEntityTypes;
 import com.loqor.core.VJBlocks;
+import com.loqor.core.VJEntities;
 import com.loqor.core.VJItems;
 import net.fabricmc.api.ModInitializer;
 
@@ -24,5 +25,6 @@ public class VieuxJeu implements ModInitializer {
 		VJItems.initialize();
 		VJBlocks.initialize();
 		VJBlockEntityTypes.initialize();
+		VJEntities.initialize();
 	}
 }
