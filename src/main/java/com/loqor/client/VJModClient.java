@@ -1,6 +1,6 @@
 package com.loqor.client;
 
-import com.loqor.client.renderers.TestBlockEntityRendering;
+import com.loqor.client.renderers.TestBlockEntityRenderer;
 import com.loqor.core.VJBlockEntityTypes;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -16,6 +16,6 @@ public class VJModClient implements ClientModInitializer {
     }
 
     public void setupBlockEntityRendering() {
-        BlockEntityRendererFactories.register(VJBlockEntityTypes.TEST_BLOCK_ENTITY_TYPE, TestBlockEntityRendering::new);
+        BlockEntityRendererFactories.register(VJBlockEntityTypes.TEST_BLOCK_ENTITY_TYPE, TestBlockEntityRenderer::new);
     }
 }

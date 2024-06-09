@@ -2,7 +2,6 @@ package com.loqor.client.renderers;
 
 import com.loqor.VieuxJeu;
 import com.loqor.core.blockentities.TestBlockEntity;
-import com.loqor.core.rwguia.Sprite;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
@@ -14,15 +13,13 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
-import org.joml.Vector2f;
 
 import static net.minecraft.client.MinecraftClient.IS_SYSTEM_MAC;
 
-public class TestBlockEntityRendering<T extends TestBlockEntity> implements BlockEntityRenderer<T> {
+public class TestBlockEntityRenderer<T extends TestBlockEntity> implements BlockEntityRenderer<T> {
     private Framebuffer framebuffer;
 
-    public TestBlockEntityRendering(BlockEntityRendererFactory.Context context) {
-    }
+    public TestBlockEntityRenderer(BlockEntityRendererFactory.Context context) {}
 
     @Override
     public void render(T entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
@@ -60,13 +57,18 @@ public class TestBlockEntityRendering<T extends TestBlockEntity> implements Bloc
 
         // Sample rendering into the framebuffer
         framebuffer.beginWrite(false);
-
         // Add rendering code here
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder builder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
+        Matrix4f positionMatrix = stack.peek().getPositionMatrix();
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderTexture(0, Identifier.of(VieuxJeu.MOD_ID, "/textures/item/test.png"));
-        RenderSystem.setShaderColor(0f, 0.1f, 0f, 1f);
-        Sprite sprite = new Sprite(Identifier.of(VieuxJeu.MOD_ID, "/textures/item/test.png"));
-        sprite.setPosition(new Vector2f(0, 0));
-        sprite.render(stack, provider, null);
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        builder.vertex(positionMatrix, 0, 0, 0).color(1f, 1f, 1f, 1f).texture(0f, 0f);
+        builder.vertex(positionMatrix, 0, 1, 0).color(1f, 1f, 1f, 1f).texture(0f, 1f);
+        builder.vertex(positionMatrix, 1, 1, 0).color(1f, 1f, 1f, 1f).texture(1f, 1f);
+        builder.vertex(positionMatrix, 1, 0, 0).color(1f, 1f, 1f, 1f).texture(1f, 0f);
+        BufferRenderer.drawWithGlobalProgram(builder.end());
         framebuffer.endWrite();
 
         // render the framebuffer
