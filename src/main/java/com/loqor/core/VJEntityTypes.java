@@ -2,6 +2,7 @@ package com.loqor.core;
 
 import com.loqor.VieuxJeu;
 import com.loqor.core.entities.CameraEntity;
+import com.loqor.core.entities.PunchGameEntity;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.EntityDimensions;
@@ -16,6 +17,12 @@ import net.minecraft.util.Identifier;
 public class VJEntityTypes {
 
     public static void initialize() {}
+
+	public static final EntityType<PunchGameEntity> PUNCH_GAME = Registry.register(
+        Registries.ENTITY_TYPE,
+        Identifier.of(VieuxJeu.MOD_ID, "punch_game"),
+        EntityType.Builder.create(PunchGameEntity::new, SpawnGroup.MISC).dimensions(8/16F, 10/16F).build()
+    );
 
     // apparently not needed to register
 

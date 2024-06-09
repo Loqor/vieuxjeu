@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import com.loqor.core.VJBlockEntityTypes;
 import com.loqor.core.VJBlocks;
-import com.loqor.core.VJEntities;
+import com.loqor.core.VJEntityTypes;
 import com.loqor.core.VJItems;
 import com.loqor.core.entities.PunchGameEntity;
 
@@ -21,8 +21,8 @@ public class VieuxJeu implements ModInitializer {
 		VJBlocks.initialize();
 		VJItems.initialize();
 		VJBlockEntityTypes.initialize();
-		VJEntities.initialize();
+		VJEntityTypes.initialize();
 		
-		FabricDefaultAttributeRegistry.register(VJEntities.PUNCH_GAME, PunchGameEntity.createLivingAttributes());
+		FabricDefaultAttributeRegistry.register(VJEntityTypes.PUNCH_GAME, PunchGameEntity.createLivingAttributes());
 	}
 }

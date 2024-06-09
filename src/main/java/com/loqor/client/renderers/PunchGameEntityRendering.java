@@ -6,9 +6,9 @@ import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory.Context;
 import net.minecraft.util.Identifier;
 
-public class PunchGameEntityRenderer extends EntityRenderer<PunchGameEntity> {
+public class PunchGameEntityRendering extends EntityRenderer<PunchGameEntity> {
 
-	public PunchGameEntityRenderer(Context ctx) {
+	public PunchGameEntityRendering(Context ctx) {
 		super(ctx);
 	}
 

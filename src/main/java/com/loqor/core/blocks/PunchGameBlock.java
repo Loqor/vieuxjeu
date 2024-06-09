@@ -1,6 +1,6 @@
 package com.loqor.core.blocks;
 
-import com.loqor.core.VJEntities;
+import com.loqor.core.VJEntityTypes;
 import com.loqor.core.blockentities.PunchGameBlockEntity;
 import com.loqor.core.entities.PunchGameEntity;
 import com.mojang.serialization.MapCodec;
@@ -36,7 +36,7 @@ public class PunchGameBlock extends TallGameBlock {
 	public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
 		super.onPlaced(world, pos, state, placer, itemStack);
 		if (!world.isClient()) {
-			PunchGameEntity entity = VJEntities.PUNCH_GAME.create(world);
+			PunchGameEntity entity = VJEntityTypes.PUNCH_GAME.create(world);
 			final float offset = 2.0F - 2/16F - entity.getHeight(); // 2 blocks up, 2 pixels down
 			entity.setPosition(pos.toBottomCenterPos().offset(Direction.UP, offset));
 			entity.blockPos = pos;
