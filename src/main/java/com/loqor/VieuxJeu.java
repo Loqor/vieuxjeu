@@ -1,20 +1,16 @@
 package com.loqor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.loqor.core.VJBlockEntityTypes;
 import com.loqor.core.VJBlocks;
 import com.loqor.core.VJEntities;
 import com.loqor.core.VJItems;
-import net.fabricmc.api.ModInitializer;
+import com.loqor.core.entities.PunchGameEntity;
 
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 
 public class VieuxJeu implements ModInitializer {
 	public static final String MOD_ID = "vieuxjeu";
@@ -26,5 +22,7 @@ public class VieuxJeu implements ModInitializer {
 		VJBlocks.initialize();
 		VJBlockEntityTypes.initialize();
 		VJEntities.initialize();
+		
+		FabricDefaultAttributeRegistry.register(VJEntities.PUNCH_GAME, PunchGameEntity.createLivingAttributes());
 	}
 }
