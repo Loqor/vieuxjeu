@@ -20,7 +20,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateManager;
-import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -31,9 +32,9 @@ import net.minecraft.world.WorldView;
 
 public abstract class TallGameBlock extends BlockWithEntity {
 
-	BiFunction<BlockPos, BlockState, TicketReturningBlockEntity> createBlockEntity;
+	BiFunction<BlockPos, BlockState, ? extends TicketReturningBlockEntity> createBlockEntity;
 	
-	public TallGameBlock(BiFunction<BlockPos, BlockState, TicketReturningBlockEntity> createBlockEntity, Settings settings) {
+	public TallGameBlock(BiFunction<BlockPos, BlockState, ? extends TicketReturningBlockEntity> createBlockEntity, Settings settings) {
 		super(settings);
 		this.createBlockEntity = createBlockEntity;
 		this.setDefaultState(this.stateManager.getDefaultState().with(HORIZONTAL_FACING, Direction.NORTH).with(DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER));
@@ -112,6 +113,24 @@ public abstract class TallGameBlock extends BlockWithEntity {
 	@Override
 	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
 		builder.add(HORIZONTAL_FACING, DOUBLE_BLOCK_HALF);
+	}
+	
+	public abstract static class RequiresToken extends TallGameBlock {
+				
+		public RequiresToken(BiFunction<BlockPos, BlockState, TicketReturningBlockEntity.RequiresToken> createBlockEntity, Settings settings) {
+			super(createBlockEntity, settings);
+		}
+
+		@Override
+		protected ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+			BlockEntity be = world.getBlockEntity(pos);
+			if (be instanceof TicketReturningBlockEntity.RequiresToken) {
+				TicketReturningBlockEntity.RequiresToken gameBlockEntity = (TicketReturningBlockEntity.RequiresToken) be;
+				if (gameBlockEntity.feedTokens(stack, player)) return ItemActionResult.success(world.isClient());
+			}
+			return super.onUseWithItem(stack, state, world, pos, player, hand, hit);
+		}
+
 	}
 
 }
