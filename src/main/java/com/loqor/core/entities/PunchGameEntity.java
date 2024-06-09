@@ -6,7 +6,6 @@ import org.jetbrains.annotations.Nullable;
 
 import com.loqor.VieuxJeu;
 import com.loqor.core.blockentities.PunchGameBlockEntity;
-import com.loqor.core.blockentities.TicketReturningBlockEntity;
 
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
@@ -56,13 +55,19 @@ public class PunchGameEntity extends LivingEntity {
 		final World world = this.getWorld();
 		final BlockEntity be = world.getBlockEntity(this.blockPos);
 				
-		if (this.blockPos != null && !world.isClient() && be != null && be instanceof TicketReturningBlockEntity) {
-			final int tickets = (int) (Math.max(0, Math.ceil(amount - 1.0)) * 10);
+		if (this.blockPos != null && !world.isClient() && be != null && be instanceof PunchGameBlockEntity) {
+			PunchGameBlockEntity gameBlockEntity = (PunchGameBlockEntity) be;
+			
+			gameBlockEntity.score = Math.min((int) (Math.ceil(amount  * 10)) + Math.abs(this.getRandom().nextInt()) % 7, 999);
+			gameBlockEntity.deactivate();
+			
+			final int tickets = ((int) (gameBlockEntity.score / 10) - 1) * 5;
+			
 			if (tickets > 0) {
-				// TODO: Think about if we want to display the number going up and wait an amount of time until giving tickets
-				((TicketReturningBlockEntity) be).giveTickets(tickets);
-				world.playSound(null, blockPos, WIN_SOUND, SoundCategory.BLOCKS);
+				((PunchGameBlockEntity) be).giveTickets(tickets);
+				world.playSound(null, this.blockPos, WIN_SOUND, SoundCategory.BLOCKS);
 			}
+			
 			return true;
 		}
 		

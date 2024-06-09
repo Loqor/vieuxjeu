@@ -81,10 +81,12 @@ public abstract class TicketReturningBlockEntity extends BlockEntity {
 		public void activate() {
 			this.isActive = true;
 			this.currentTokens = 0;
+			this.markDirty();
 		}
 		
 		public void deactivate() {
 			this.isActive = false;
+			this.markDirty();
 		}
 		
 		public boolean isActive() {

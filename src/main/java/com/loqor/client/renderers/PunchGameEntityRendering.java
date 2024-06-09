@@ -11,7 +11,7 @@ public class PunchGameEntityRendering extends EntityRenderer<PunchGameEntity> {
 	public PunchGameEntityRendering(Context ctx) {
 		super(ctx);
 	}
-
+	
 	@Override
 	public Identifier getTexture(PunchGameEntity var1) {
 		return null;
