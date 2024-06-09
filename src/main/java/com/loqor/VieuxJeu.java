@@ -18,8 +18,8 @@ public class VieuxJeu implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		VJItems.initialize();
 		VJBlocks.initialize();
+		VJItems.initialize();
 		VJBlockEntityTypes.initialize();
 		VJEntities.initialize();
 		

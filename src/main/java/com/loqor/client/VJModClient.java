@@ -1,7 +1,7 @@
 package com.loqor.client;
 
 import com.loqor.client.renderers.PunchGameEntityRenderer;
-import com.loqor.client.renderers.TestBlockEntityRenderer;
+import com.loqor.client.renderers.TestBlockEntityRendering;
 import com.loqor.core.VJBlockEntityTypes;
 import com.loqor.core.VJEntities;
 
@@ -21,7 +21,7 @@ public class VJModClient implements ClientModInitializer {
     }
 
     public void setupBlockEntityRendering() {
-        BlockEntityRendererFactories.register(VJBlockEntityTypes.TEST_BLOCK_ENTITY_TYPE, TestBlockEntityRenderer::new);
+        BlockEntityRendererFactories.register(VJBlockEntityTypes.TEST_BLOCK_ENTITY_TYPE, TestBlockEntityRendering::new);
     }
     
     public static final void registerEntityRenderers() {
