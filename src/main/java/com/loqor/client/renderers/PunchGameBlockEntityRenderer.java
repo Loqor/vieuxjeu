@@ -8,7 +8,7 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 
-public class PunchGameBlockEntityRendering<T extends PunchGameBlockEntity> implements BlockEntityRenderer<T> {
+public class PunchGameBlockEntityRenderer<T extends PunchGameBlockEntity> implements BlockEntityRenderer<T> {
 	
 	private final TextRenderer textRenderer;
 	
@@ -24,7 +24,7 @@ public class PunchGameBlockEntityRendering<T extends PunchGameBlockEntity> imple
 		return startValue + (endValue - startValue) * function;
 	}
 		
-	public PunchGameBlockEntityRendering(BlockEntityRendererFactory.Context ctx) {
+	public PunchGameBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {
 		this.textRenderer = ctx.getTextRenderer();
 	}
 

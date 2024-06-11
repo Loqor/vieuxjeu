@@ -8,12 +8,12 @@ import net.minecraft.util.Identifier;
 
 /**
  * This is just used for crit-particles and bounding boxes. 
- * {@link PunchGameBlockEntityRendering} will render the punch bag, not this.
- * @see PunchGameBlockEntityRendering
+ * {@link PunchGameBlockEntityRenderer} will render the punch bag, not this.
+ * @see PunchGameBlockEntityRenderer
  */
-public class PunchGameEntityRendering extends EntityRenderer<PunchGameEntity> {
+public class PunchGameEntityRenderer extends EntityRenderer<PunchGameEntity> {
 
-	public PunchGameEntityRendering(Context ctx) { super(ctx); }
+	public PunchGameEntityRenderer(Context ctx) { super(ctx); }
 	@Override public Identifier getTexture(PunchGameEntity var1) { return null; }
 
 }
