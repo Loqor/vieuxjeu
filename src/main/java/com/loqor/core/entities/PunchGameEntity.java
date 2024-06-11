@@ -4,10 +4,9 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.loqor.Scheduler;
-import com.loqor.VieuxJeu;
 import com.loqor.core.blockentities.PunchGameBlockEntity;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -23,18 +22,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtHelper;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Arm;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.tick.OrderedTick;
+import net.minecraft.world.tick.TickPriority;
 
 public class PunchGameEntity extends LivingEntity {
 
 	private static final TrackedData<BlockPos> BLOCK_ENTITY_POS = DataTracker.registerData(PunchGameEntity.class, TrackedDataHandlerRegistry.BLOCK_POS);
 	public static final String NBT_KEY_POS = "BlockPos";
-    public static final SoundEvent WIN_SOUND = SoundEvent.of(Identifier.of(VieuxJeu.MOD_ID, "punch_game_win"));
 
 	@Nullable
 	public BlockPos blockPos;
@@ -62,14 +59,13 @@ public class PunchGameEntity extends LivingEntity {
 			gameBlockEntity.setScore(Math.min((int) (Math.ceil(amount  * 10)) + Math.abs(this.getRandom().nextInt()) % 7, 999));
 			gameBlockEntity.deactivate();
 			
-			final int tickets = ((int) (gameBlockEntity.getScore() / 10) - 1) * 5;
-			
-			if (tickets > 0) {				
-				Scheduler.scheduleTask(() -> {
-					((PunchGameBlockEntity) be).giveTickets(tickets);
-					world.playSound(null, this.blockPos, WIN_SOUND, SoundCategory.BLOCKS);
-				}, (int) PunchGameBlockEntity.DELAY);
-			}
+			world.getBlockTickScheduler().scheduleTick(new OrderedTick<Block>(
+					be.getCachedState().getBlock(), 
+					blockPos, 
+					PunchGameBlockEntity.DELAY + world.getTime(), 
+					TickPriority.NORMAL, 
+					0)
+			);
 			
 			return true;
 		}
