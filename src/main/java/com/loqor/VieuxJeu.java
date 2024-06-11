@@ -10,6 +10,8 @@ import com.loqor.core.VJItems;
 import com.loqor.core.entities.PunchGameEntity;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 
 public class VieuxJeu implements ModInitializer {
@@ -24,5 +26,8 @@ public class VieuxJeu implements ModInitializer {
 		VJEntityTypes.initialize();
 		
 		FabricDefaultAttributeRegistry.register(VJEntityTypes.PUNCH_GAME, PunchGameEntity.createLivingAttributes());
+		
+        ServerTickEvents.END_SERVER_TICK.register(Scheduler::endServerTick);
+        ServerLifecycleEvents.SERVER_STOPPING.register(Scheduler::serverStopping);
 	}
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.loqor.Scheduler;
 import com.loqor.VieuxJeu;
 import com.loqor.core.blockentities.PunchGameBlockEntity;
 
@@ -58,14 +59,16 @@ public class PunchGameEntity extends LivingEntity {
 		if (this.blockPos != null && !world.isClient() && be != null && be instanceof PunchGameBlockEntity) {
 			PunchGameBlockEntity gameBlockEntity = (PunchGameBlockEntity) be;
 			
-			gameBlockEntity.score = Math.min((int) (Math.ceil(amount  * 10)) + Math.abs(this.getRandom().nextInt()) % 7, 999);
+			gameBlockEntity.setScore(Math.min((int) (Math.ceil(amount  * 10)) + Math.abs(this.getRandom().nextInt()) % 7, 999));
 			gameBlockEntity.deactivate();
 			
-			final int tickets = ((int) (gameBlockEntity.score / 10) - 1) * 5;
+			final int tickets = ((int) (gameBlockEntity.getScore() / 10) - 1) * 5;
 			
-			if (tickets > 0) {
-				((PunchGameBlockEntity) be).giveTickets(tickets);
-				world.playSound(null, this.blockPos, WIN_SOUND, SoundCategory.BLOCKS);
+			if (tickets > 0) {				
+				Scheduler.scheduleTask(() -> {
+					((PunchGameBlockEntity) be).giveTickets(tickets);
+					world.playSound(null, this.blockPos, WIN_SOUND, SoundCategory.BLOCKS);
+				}, (int) PunchGameBlockEntity.DELAY);
 			}
 			
 			return true;
