@@ -13,15 +13,15 @@ public class PunchGameBlockEntityRendering<T extends PunchGameBlockEntity> imple
 	private final TextRenderer textRenderer;
 	
 	private static final double easeOutMath(double startTime, double startValue, double endTime, double endValue, double currentTime) {
-        double fullDuration = endTime - startTime;
-        double timePassed = currentTime - startTime;
+		final double fullDuration = endTime - startTime;
+		final double timePassed = currentTime - startTime;
 
-        double x = timePassed / fullDuration;
-        double function = Math.sqrt(1 - Math.pow(1 - x, 4)); // Circ
-//        double function = 1 - Math.pow(1 - x, 6); // Cubic
-//        double function = Math.sin((x * Math.PI) / 2); // Sine
-        
-        return startValue + (endValue - startValue) * function;
+		final double x = timePassed / fullDuration;
+		final double function = Math.sqrt(1 - Math.pow(1 - x, 4)); // Circ
+//		final double function = 1 - Math.pow(1 - x, 6); // Cubic
+//		final double function = Math.sin((x * Math.PI) / 2); // Sine
+
+		return startValue + (endValue - startValue) * function;
 	}
 		
 	public PunchGameBlockEntityRendering(BlockEntityRendererFactory.Context ctx) {
@@ -31,23 +31,18 @@ public class PunchGameBlockEntityRendering<T extends PunchGameBlockEntity> imple
 	@Override
 	public void render(T be, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
 		matrices.push();
-		float f = 0.015625f;
-		matrices.scale(f, -f, f);
+		final float fontScale = 0.015625f;
+		matrices.scale(fontScale, -fontScale, fontScale);
 		
-		int score;
-		if (be.getScore() == 0 || be.currentValueTick + PunchGameBlockEntity.DELAY <= be.getWorld().getTime() + tickDelta) {
-			score = be.getScore();
-		} else {
-			double longNumbie = easeOutMath(be.currentValueTick, be.previousValue, be.currentValueTick + PunchGameBlockEntity.DELAY, be.getScore(), be.getWorld().getTime() + tickDelta);
-			score = (int) Math.floor(longNumbie + 0.25);
-		}
-		
-		String text = String.format("%03d", score);
-				
-		this.textRenderer.draw(text, 0.5f/f - this.textRenderer.getWidth(text)/2f, -this.textRenderer.fontHeight - (1.5f/f), 0xE14D2F, false, matrices.peek().getPositionMatrix(), vertexConsumers, 
-				TextRenderer.TextLayerType.POLYGON_OFFSET, 0, light);
-		matrices.pop();
+		// If score was just set to 0 or time is after the end of the ease-out, just render the score
+		String scoreText = String.format("%03d", 
+			(be.getScore() == 0 || be.currentValueTick + PunchGameBlockEntity.WIN_DELAY <= be.getWorld().getTime() + tickDelta) ?
+				be.getScore() :
+				(int) Math.floor(easeOutMath(be.currentValueTick, be.previousValue, be.currentValueTick + PunchGameBlockEntity.WIN_DELAY, be.getScore(), be.getWorld().getTime() + tickDelta) + 0.25f)
+		);
 
+		this.textRenderer.draw(scoreText, 0.5f/fontScale - this.textRenderer.getWidth(scoreText)/2.0f, -this.textRenderer.fontHeight - (1.5f/fontScale), 0xE14D2F, false, matrices.peek().getPositionMatrix(), vertexConsumers, TextRenderer.TextLayerType.POLYGON_OFFSET, 0, light);
+		matrices.pop();
 	}
 
 }

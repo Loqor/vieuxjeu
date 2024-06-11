@@ -29,14 +29,16 @@ public class PunchGameBlockEntity extends TicketReturningBlockEntity.RequiresTok
 	public long currentValueTick = 0;
 	public int previousValue = 0;
 	
-	public static final long DELAY = 20 * 3;
-	public static final String NBT_KEY_CONNECTED_ENTITY = "ConnectedEntity";
-	public static final String NBT_KEY_SCORE = "Value";
-	public static final String NBT_KEY_PREVIOUS_VALUE = "PreviousValue";
-	public static final String NBT_KEY_SCORE_TICK = "ScoreTick";
+	// 3s at normal tick rate
+	public static final long WIN_DELAY = 20 * 3;
+	
+	private static final String NBT_KEY_CONNECTED_ENTITY = "ConnectedEntity";
+	private static final String NBT_KEY_SCORE = "Value";
+	private static final String NBT_KEY_SCORE_TICK = "ScoreTick";
+	private static final String NBT_KEY_PREVIOUS_VALUE = "PreviousValue";
 	
 	public PunchGameBlockEntity(BlockPos pos, BlockState state) {
-		super(VJBlockEntityTypes.PUNCH_GAME, pos, state, 10);
+		super(VJBlockEntityTypes.PUNCH_GAME, pos, state);
 	}
 	
 	public int getScore() {
@@ -54,7 +56,7 @@ public class PunchGameBlockEntity extends TicketReturningBlockEntity.RequiresTok
 		super.activate();
 		
 		if (!this.world.isClient()) {
-			PunchGameEntity entity = VJEntityTypes.PUNCH_GAME.create(this.world);
+			final PunchGameEntity entity = VJEntityTypes.PUNCH_GAME.create(this.world);
 			final float offset = 2.0F - 2/16F - entity.getHeight(); // 2 blocks up, 2 pixels down
 			entity.setPosition(this.pos.toBottomCenterPos().offset(Direction.UP, offset));
 			entity.blockPos = this.pos;
@@ -72,7 +74,7 @@ public class PunchGameBlockEntity extends TicketReturningBlockEntity.RequiresTok
 		super.deactivate();
 		
 		if (!this.world.isClient() && this.entityUUID != null) {			
-			MinecraftServer server = world.getServer();
+			final MinecraftServer server = world.getServer();
 			final UUID uuidBeforeRemoval = this.entityUUID;
 			// This is used so that crit particles will get created but the entity will still die instantly
 			// Remember kiddos, never forget to do your null checks on @Nullable's. Mods exist

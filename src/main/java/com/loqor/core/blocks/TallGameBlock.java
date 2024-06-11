@@ -60,8 +60,8 @@ public abstract class TallGameBlock extends BlockWithEntity {
 	@Override
 	@Nullable
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		BlockPos blockPos = ctx.getBlockPos();
-		World world = ctx.getWorld();
+		final BlockPos blockPos = ctx.getBlockPos();
+		final World world = ctx.getWorld();
 		if (blockPos.getY() < world.getTopY() - 1 && world.getBlockState(blockPos.up()).canReplace(ctx))
 			return super.getPlacementState(ctx).with(HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite());
 		return null;
@@ -75,7 +75,7 @@ public abstract class TallGameBlock extends BlockWithEntity {
 	@Override
 	protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
 		if (state.get(DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER) {
-			BlockState blockState = world.getBlockState(pos.down());
+			final BlockState blockState = world.getBlockState(pos.down());
 			return blockState.isOf(this) && blockState.get(DOUBLE_BLOCK_HALF) == DoubleBlockHalf.LOWER;
 		}
 		return super.canPlaceAt(state, world, pos);
@@ -101,9 +101,9 @@ public abstract class TallGameBlock extends BlockWithEntity {
 	}
 
 	protected static void onBreakInCreative(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-		BlockPos blockPos = pos.down();
-		BlockState blockState = world.getBlockState(blockPos);
-		DoubleBlockHalf doubleBlockHalf = state.get(DOUBLE_BLOCK_HALF);
+		final BlockPos blockPos = pos.down();
+		final BlockState blockState = world.getBlockState(blockPos);
+		final DoubleBlockHalf doubleBlockHalf = state.get(DOUBLE_BLOCK_HALF);
 		if (doubleBlockHalf == DoubleBlockHalf.UPPER && blockState.isOf(state.getBlock()) && blockState.get(DOUBLE_BLOCK_HALF) == DoubleBlockHalf.LOWER) {
 			world.setBlockState(blockPos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
 			world.syncWorldEvent(player, WorldEvents.BLOCK_BROKEN, blockPos, Block.getRawIdFromState(blockState));
@@ -123,9 +123,9 @@ public abstract class TallGameBlock extends BlockWithEntity {
 
 		@Override
 		protected ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-			BlockEntity be = world.getBlockEntity(pos);
+			final BlockEntity be = world.getBlockEntity(pos);
 			if (be instanceof TicketReturningBlockEntity.RequiresToken) {
-				TicketReturningBlockEntity.RequiresToken gameBlockEntity = (TicketReturningBlockEntity.RequiresToken) be;
+				final TicketReturningBlockEntity.RequiresToken gameBlockEntity = (TicketReturningBlockEntity.RequiresToken) be;
 				if (gameBlockEntity.feedTokens(stack, player)) return ItemActionResult.success(world.isClient());
 			}
 			return super.onUseWithItem(stack, state, world, pos, player, hand, hit);

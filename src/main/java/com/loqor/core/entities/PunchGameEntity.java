@@ -31,7 +31,7 @@ import net.minecraft.world.tick.TickPriority;
 public class PunchGameEntity extends LivingEntity {
 
 	private static final TrackedData<BlockPos> BLOCK_ENTITY_POS = DataTracker.registerData(PunchGameEntity.class, TrackedDataHandlerRegistry.BLOCK_POS);
-	public static final String NBT_KEY_POS = "BlockPos";
+	private static final String NBT_KEY_POS = "BlockPos";
 
 	@Nullable
 	public BlockPos blockPos;
@@ -54,18 +54,20 @@ public class PunchGameEntity extends LivingEntity {
 		final BlockEntity be = world.getBlockEntity(this.blockPos);
 				
 		if (this.blockPos != null && !world.isClient() && be != null && be instanceof PunchGameBlockEntity) {
-			PunchGameBlockEntity gameBlockEntity = (PunchGameBlockEntity) be;
+			final PunchGameBlockEntity gameBlockEntity = (PunchGameBlockEntity) be;
 			
-			gameBlockEntity.setScore(Math.min((int) (Math.ceil(amount  * 10)) + Math.abs(this.getRandom().nextInt()) % 7, 999));
-			gameBlockEntity.deactivate();
-			
+			// Set the score to (damage_amount * 10) + rand(0-6), rounded up, max score of 999
+			gameBlockEntity.setScore(Math.min((int) (Math.ceil(amount  * 10)) + this.getRandom().nextInt(7), 999));
+						
 			world.getBlockTickScheduler().scheduleTick(new OrderedTick<Block>(
 					be.getCachedState().getBlock(), 
 					blockPos, 
-					PunchGameBlockEntity.DELAY + world.getTime(), 
+					PunchGameBlockEntity.WIN_DELAY + world.getTime(), 
 					TickPriority.NORMAL, 
 					0)
 			);
+			
+			gameBlockEntity.deactivate();
 			
 			return true;
 		}
@@ -75,10 +77,11 @@ public class PunchGameEntity extends LivingEntity {
 	
 	@Override
 	public void tick() {
+		// If the game is gone, remove the entity
 		if (!this.getWorld().isClient() && this.blockPos != null && (
 			this.getWorld().getBlockEntity(this.blockPos) == null ||
 			!(this.getWorld().getBlockEntity(this.blockPos) instanceof PunchGameBlockEntity)
-		)) this.remove(RemovalReason.DISCARDED);
+		)) this.discard();
 		
 		super.tick();
 	}
@@ -104,7 +107,9 @@ public class PunchGameEntity extends LivingEntity {
 		if (this.blockPos != null)
 			nbt.put(NBT_KEY_POS, NbtHelper.fromBlockPos(this.blockPos));
 	}
-
+	
+	// Required by LivingEntity. This class really acts as Entity but with 
+	// criticals added without re-inventing how critical hits work
 	@Override public Iterable<ItemStack> getArmorItems() { return List.of(); }
 	@Override public ItemStack getEquippedStack(EquipmentSlot var1) { return ItemStack.EMPTY; }
 	@Override public void equipStack(EquipmentSlot var1, ItemStack var2) {}
