@@ -33,6 +33,9 @@ public class PunchGameBlockEntityRenderer<T extends PunchGameBlockEntity> implem
 		matrices.push();
 		final float fontScale = 0.015625f;
 		matrices.scale(fontScale, -fontScale, fontScale);
+
+		// TODO: Rotate based on state. 
+		// I, @Bug1312, can't visualize this without it taking so much longer than someone who just understands
 		
 		// If score was just set to 0 or time is after the end of the ease-out, just render the score
 		String scoreText = String.format("%03d", 

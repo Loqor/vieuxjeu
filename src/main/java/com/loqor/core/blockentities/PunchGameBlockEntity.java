@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.loqor.core.VJBlockEntityTypes;
 import com.loqor.core.VJEntityTypes;
+import com.loqor.core.VJSoundEvents;
 import com.loqor.core.entities.PunchGameEntity;
 
 import net.minecraft.block.BlockState;
@@ -17,6 +18,7 @@ import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.registry.RegistryWrapper.WrapperLookup;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -54,6 +56,8 @@ public class PunchGameBlockEntity extends TicketReturningBlockEntity.RequiresTok
 	@Override
 	public void activate() {
 		super.activate();
+		
+		world.playSound(null, pos, VJSoundEvents.PUNCH_GAME_START, SoundCategory.BLOCKS);
 		
 		if (!this.world.isClient()) {
 			final PunchGameEntity entity = VJEntityTypes.PUNCH_GAME.create(this.world);

@@ -7,6 +7,7 @@ import net.minecraft.util.Identifier;
 
 public final class VJSoundEvents {
 
+	public static final SoundEvent PUNCH_GAME_START = register("punch_game_start");
 	public static final SoundEvent PUNCH_GAME_WIN = register("punch_game_win");
 	
 	private static final SoundEvent register(String name) {

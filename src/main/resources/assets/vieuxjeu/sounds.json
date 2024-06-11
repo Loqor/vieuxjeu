@@ -4,5 +4,11 @@
 		"sounds":[
 			"vieuxjeu:punch_game_win"
 		]
+	},
+	"punch_game_start":{
+		"subtitle":"subtitles.vieuxjeu.punch_game_start",
+		"sounds":[
+			"minecraft:block/bamboo_wood_button/bamboo_wood_button"
+		]
 	}
 }
