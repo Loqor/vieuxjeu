@@ -1,6 +1,7 @@
 package com.loqor.core;
 
 import com.loqor.VieuxJeu;
+import com.loqor.core.blockentities.ClawBlockEntity;
 import com.loqor.core.blockentities.PunchGameBlockEntity;
 import com.loqor.core.blockentities.TestBlockEntity;
 
@@ -20,4 +21,9 @@ public class VJBlockEntityTypes {
     public static final BlockEntityType<PunchGameBlockEntity> PUNCH_GAME = Registry.register(
     Registries.BLOCK_ENTITY_TYPE, Identifier.of(VieuxJeu.MOD_ID, "punch_game"),
             BlockEntityType.Builder.create(PunchGameBlockEntity::new, VJBlocks.PUNCH_GAME).build());
+    
+    public static final BlockEntityType<ClawBlockEntity> CLAW = Registry.register(
+    Registries.BLOCK_ENTITY_TYPE, Identifier.of(VieuxJeu.MOD_ID, "claw"),
+            BlockEntityType.Builder.create(ClawBlockEntity::new, VJBlocks.CLAW).build());
+
 }
