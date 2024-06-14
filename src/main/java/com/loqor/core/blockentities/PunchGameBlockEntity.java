@@ -60,11 +60,13 @@ public class PunchGameBlockEntity extends TicketReturningBlockEntity.RequiresTok
 		world.playSound(null, pos, VJSoundEvents.PUNCH_GAME_START, SoundCategory.BLOCKS);
 		
 		if (!this.world.isClient()) {
-			final PunchGameEntity entity = VJEntityTypes.PUNCH_GAME.create(this.world);
-			final float offset = 2.0F - 2/16F - entity.getHeight(); // 2 blocks up, 2 pixels down
+			PunchGameEntity entity = VJEntityTypes.PUNCH_GAME.create(this.world);
+			float offset = 2.0F - 2/16F - entity.getHeight(); // 2 blocks up, 2 pixels down
 			entity.setPosition(this.pos.toBottomCenterPos().offset(Direction.UP, offset));
 			entity.blockPos = this.pos;
-			if (this.world.spawnEntity(entity)) this.entityUUID = entity.getUuid();
+			if (this.world.spawnEntity(entity)) {
+				this.entityUUID = entity.getUuid();
+			}
 			else this.deactivate();
 		}
 		

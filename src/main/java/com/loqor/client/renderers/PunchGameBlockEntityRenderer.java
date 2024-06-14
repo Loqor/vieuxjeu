@@ -2,17 +2,21 @@ package com.loqor.client.renderers;
 
 import com.loqor.core.blockentities.PunchGameBlockEntity;
 
+import com.loqor.core.blocks.PunchGameBlock;
+import com.loqor.core.blocks.TallGameBlock;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 
+import static net.minecraft.state.property.Properties.HORIZONTAL_FACING;
+
 public class PunchGameBlockEntityRenderer<T extends PunchGameBlockEntity> implements BlockEntityRenderer<T> {
 	
 	private final TextRenderer textRenderer;
 	
-	private static final double easeOutMath(double startTime, double startValue, double endTime, double endValue, double currentTime) {
+	private static double easeOutMath(double startTime, double startValue, double endTime, double endValue, double currentTime) {
 		final double fullDuration = endTime - startTime;
 		final double timePassed = currentTime - startTime;
 
@@ -36,6 +40,7 @@ public class PunchGameBlockEntityRenderer<T extends PunchGameBlockEntity> implem
 
 		// TODO: Rotate based on state. 
 		// I, @Bug1312, can't visualize this without it taking so much longer than someone who just understands
+		float rot = be.getCachedState().get(TallGameBlock.HORIZONTAL_FACING).asRotation();
 		
 		// If score was just set to 0 or time is after the end of the ease-out, just render the score
 		String scoreText = String.format("%03d", 

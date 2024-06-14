@@ -5,6 +5,8 @@ import static net.minecraft.state.property.Properties.HORIZONTAL_FACING;
 
 import java.util.function.BiFunction;
 
+import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.state.property.Properties;
 import org.jetbrains.annotations.Nullable;
 
 import com.loqor.core.blockentities.TicketReturningBlockEntity;
@@ -33,6 +35,8 @@ import net.minecraft.world.WorldView;
 public abstract class TallGameBlock extends BlockWithEntity {
 
 	BiFunction<BlockPos, BlockState, ? extends TicketReturningBlockEntity> createBlockEntity;
+
+	public static final DirectionProperty HORIZONTAL_FACING = Properties.HORIZONTAL_FACING;
 	
 	public TallGameBlock(BiFunction<BlockPos, BlockState, ? extends TicketReturningBlockEntity> createBlockEntity, Settings settings) {
 		super(settings);
@@ -124,8 +128,7 @@ public abstract class TallGameBlock extends BlockWithEntity {
 		@Override
 		protected ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 			final BlockEntity be = world.getBlockEntity(pos);
-			if (be instanceof TicketReturningBlockEntity.RequiresToken) {
-				final TicketReturningBlockEntity.RequiresToken gameBlockEntity = (TicketReturningBlockEntity.RequiresToken) be;
+			if (be instanceof TicketReturningBlockEntity.RequiresToken gameBlockEntity) {
 				if (gameBlockEntity.feedTokens(stack, player)) return ItemActionResult.success(world.isClient());
 			}
 			return super.onUseWithItem(stack, state, world, pos, player, hand, hit);

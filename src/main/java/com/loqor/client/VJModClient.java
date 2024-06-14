@@ -21,12 +21,12 @@ public class VJModClient implements ClientModInitializer {
         registerEntityRenderers();
     }
 
-    public static final void setupBlockEntityRendering() {
+    public static void setupBlockEntityRendering() {
         BlockEntityRendererFactories.register(VJBlockEntityTypes.TEST_BLOCK_ENTITY_TYPE, TestBlockEntityRenderer::new);
         BlockEntityRendererFactories.register(VJBlockEntityTypes.PUNCH_GAME, PunchGameBlockEntityRenderer::new);
     }
     
-    public static final void registerEntityRenderers() {
+    public static void registerEntityRenderers() {
         EntityRendererRegistry.register(VJEntityTypes.PUNCH_GAME, PunchGameEntityRenderer::new);
     }
 }

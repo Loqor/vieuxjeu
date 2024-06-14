@@ -22,7 +22,11 @@ public class VieuxJeu implements ModInitializer {
 		VJItems.initialize();
 		VJBlockEntityTypes.initialize();
 		VJEntityTypes.initialize();
-		
-		FabricDefaultAttributeRegistry.register(VJEntityTypes.PUNCH_GAME, PunchGameEntity.createLivingAttributes());		
+
+		registerEntityAttributes();
+	}
+
+	public void registerEntityAttributes() {
+		FabricDefaultAttributeRegistry.register(VJEntityTypes.PUNCH_GAME, PunchGameEntity.createLivingAttributes());
 	}
 }

@@ -2,6 +2,9 @@ package com.loqor.core.entities;
 
 import java.util.List;
 
+import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.mob.MobEntity;
 import org.jetbrains.annotations.Nullable;
 
 import com.loqor.core.blockentities.PunchGameBlockEntity;
@@ -36,10 +39,10 @@ public class PunchGameEntity extends LivingEntity {
 	@Nullable
 	public BlockPos blockPos;
 
-	public PunchGameEntity(EntityType<? extends LivingEntity> type, World world) {
+	public PunchGameEntity(EntityType<? extends PunchGameEntity> type, World world) {
 		super(type, world);
 	}
-	
+
 	@Override public boolean addStatusEffect(StatusEffectInstance effect, Entity source) { return false; }
 	@Override public boolean hasNoGravity() { return true; }
 	@Override public boolean isPushable() { return false; }
