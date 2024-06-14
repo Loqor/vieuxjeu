@@ -2,5 +2,6 @@
 	"subtitles.vieuxjeu.punch_game_start": "Punch ball releases",
 	"subtitles.vieuxjeu.punch_game_win": "Game wins",
 
-	"block.vieuxjeu.punch_game": "Punch Ball Game"
+	"block.vieuxjeu.punch_game": "Punch Ball Game",
+	"block.vieuxjeu.claw_game": "Claw Game"
 }
