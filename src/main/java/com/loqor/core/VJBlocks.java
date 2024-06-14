@@ -1,6 +1,7 @@
 package com.loqor.core;
 
 import com.loqor.VieuxJeu;
+import com.loqor.core.blocks.ClawBlock;
 import com.loqor.core.blocks.PunchGameBlock;
 import com.loqor.core.blocks.TestBlock;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
@@ -35,4 +36,5 @@ public class VJBlocks {
 
     public static final TestBlock TEST_BLOCK = register(new TestBlock(AbstractBlock.Settings.create().sounds(BlockSoundGroup.ANVIL)), "test_block", true);
     public static final PunchGameBlock PUNCH_GAME = register(new PunchGameBlock(AbstractBlock.Settings.create().sounds(BlockSoundGroup.ANVIL)), "punch_game", true);
+    public static final ClawBlock CLAW = register(new ClawBlock(AbstractBlock.Settings.create().sounds(BlockSoundGroup.ANVIL)), "claw_game", true);
 }
