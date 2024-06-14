@@ -24,9 +24,9 @@ public abstract class TicketReturningBlockEntity extends BlockEntity {
 	}
 
 	public void giveTickets(int amount) {
-		BlockState state = getCachedState();
+		final BlockState state = getCachedState();
 		if (state == null) return;
-		Direction dir = state.getOrEmpty(HORIZONTAL_FACING).orElse(Direction.NORTH);
+		final Direction dir = state.getOrEmpty(HORIZONTAL_FACING).orElse(Direction.NORTH);
 		ItemDispenserBehavior.spawnItem(world, new ItemStack(TerrificTickets.TICKET, amount), 6, dir, pos.toCenterPos().offset(dir, 0.8F));
 	}
 	
@@ -62,9 +62,9 @@ public abstract class TicketReturningBlockEntity extends BlockEntity {
 				this.currentTokens += itemStack.getCount();
 			
 			} else if (itemStack.isOf(TerrificTickets.PASSCARD)) {
-				PasscardComponent contents = itemStack.get(TerrificTickets.PASSCARD_COMPONENT);
+				final PasscardComponent contents = itemStack.get(TerrificTickets.PASSCARD_COMPONENT);
 				if (contents == null) return false;
-				Pair<PasscardComponent, Integer> response = contents.removeTokens(getTokensRequiredLeft());
+				final Pair<PasscardComponent, Integer> response = contents.removeTokens(getTokensRequiredLeft());
 				
 				this.currentTokens += response.getRight();
 				if (tokenFeeder == null || !tokenFeeder.isInCreativeMode()) {
@@ -81,10 +81,12 @@ public abstract class TicketReturningBlockEntity extends BlockEntity {
 		public void activate() {
 			this.isActive = true;
 			this.currentTokens = 0;
+			this.markDirty();
 		}
 		
 		public void deactivate() {
 			this.isActive = false;
+			this.markDirty();
 		}
 		
 		public boolean isActive() {

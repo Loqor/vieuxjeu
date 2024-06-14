@@ -1,6 +1,7 @@
 package com.loqor.core;
 
 import com.loqor.VieuxJeu;
+import com.loqor.core.blocks.PunchGameBlock;
 import com.loqor.core.blocks.TestBlock;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -33,4 +34,5 @@ public class VJBlocks {
     }
 
     public static final TestBlock TEST_BLOCK = register(new TestBlock(AbstractBlock.Settings.create().sounds(BlockSoundGroup.ANVIL)), "test_block", true);
+    public static final PunchGameBlock PUNCH_GAME = register(new PunchGameBlock(AbstractBlock.Settings.create().sounds(BlockSoundGroup.ANVIL)), "punch_game", true);
 }
