@@ -30,13 +30,14 @@ public class Sprite implements CanvasObject {
     public void render(WorldRenderContext context, Canvas canvas) {
         context.matrixStack().push();
         context.matrixStack().translate(canvas.get2DPosition().getX() + getPosition().x,canvas.get2DPosition().getY() + getPosition().y, canvas.get2DPosition().getX() + getPosition().x);
-        CanvasObject.drawTextureInWorld(context.matrixStack(), context.consumers(), RenderLayer.getEntityCutout(getTexture()), 15728880);
+        context.matrixStack().scale(15, 15, 15);
+        CanvasObject.drawTextureInWorld(canvas, context.matrixStack(), context.consumers(), RenderLayer.getEndPortal(), 15728880);
         context.matrixStack().pop();
     }
 
     @Override
     public void render(MatrixStack stack, VertexConsumerProvider provider, @Nullable Canvas canvas) {
-        CanvasObject.drawTextureInWorld(stack, provider, RenderLayer.getEntityCutout(getTexture()), 15728880);
+        CanvasObject.drawTextureInWorld(canvas, stack, provider, RenderLayer.getEntityCutout(getTexture()), 15728880);
     }
 
     @Override

@@ -30,22 +30,27 @@ public interface CanvasObject {
     /*
      * Make sure to push a matrixstack before this call and to pop a matrixstack after this call
      * */
-    static void drawTextureInWorld(MatrixStack stack, VertexConsumerProvider provider, RenderLayer layer, int light) {
-        drawTextureInWorld(stack, provider, layer, new Color(255, 255, 255, 255), light);
+    static void drawTextureInWorld(Canvas canvas, MatrixStack stack, VertexConsumerProvider provider, RenderLayer layer, int light) {
+        drawTextureInWorld(canvas, stack, provider, layer, new Color(255, 255, 255, 255), light);
     }
 
 
     /*
      * Make sure to push a matrixstack before this call and to pop a matrixstack after this call
      * */
-    static void drawTextureInWorld(MatrixStack stack, VertexConsumerProvider provider, RenderLayer layer, Color color, int light) {
+    static void drawTextureInWorld(Canvas canvas, MatrixStack stack, VertexConsumerProvider provider, RenderLayer layer, Color color, int light) {
         VertexConsumer vertexConsumer = provider.getBuffer(layer);
         MatrixStack.Entry entry = stack.peek();
         Matrix4f matrix4f = entry.getPositionMatrix();
-        vertex(vertexConsumer, matrix4f, entry, -1F, -1F, color.getRed(), color.getGreen(), color.getBlue(),color.getAlpha(), 0, 1, light);
-        vertex(vertexConsumer, matrix4f, entry, 1, -1F, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha(), 1, 1, light);
-        vertex(vertexConsumer, matrix4f, entry, 1, 1F, color.getRed(), color.getGreen(),color.getBlue(), color.getAlpha(), 1, 0, light);
-        vertex(vertexConsumer, matrix4f, entry, -1F, 1F, color.getRed(), color.getGreen(),color.getBlue(), color.getAlpha(), 0, 0, light);
+        int u0 = 0, v0 = 0, u1 = 1, v1 = 1;
+
+        //provider.getBuffer(RenderLayer.getEndPortal()).vertex(6, 6, 6);
+        //provider.getBuffer(RenderLayer.getEndPortal()).vertex(55, 55, 55);
+
+        vertex(vertexConsumer, matrix4f, entry, -1F, -1F, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha(), u0, v1, light);
+        vertex(vertexConsumer, matrix4f, entry, 1, -1F, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha(), u1, v1, light);
+        vertex(vertexConsumer, matrix4f, entry, 1, 1F, color.getRed(), color.getGreen(),color.getBlue(), color.getAlpha(), u1, v0, light);
+        vertex(vertexConsumer, matrix4f, entry, -1F, 1F, color.getRed(), color.getGreen(),color.getBlue(), color.getAlpha(), u0, v0, light);
     }
 
 }

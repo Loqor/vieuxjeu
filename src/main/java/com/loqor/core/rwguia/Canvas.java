@@ -2,6 +2,7 @@ package com.loqor.core.rwguia;
 
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.minecraft.client.util.math.Vector2f;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Vector3f;
@@ -20,6 +21,7 @@ import java.util.HashMap;
 public class Canvas {
 
     public Vector3f position;
+    public Vector2f dimensions;
 
     /*
             String is the id for indexing,
@@ -27,6 +29,19 @@ public class Canvas {
      */
     private HashMap<String, CanvasObject> objects = new HashMap<>();
     private Direction canvasDirection = Direction.NORTH;
+
+    private Canvas() {
+
+    }
+
+    public static Canvas create(BlockPos pos, Direction direction, int width, int height) {
+        Canvas canvas = new Canvas();
+        canvas.position = new Vector3f(pos.getX(), pos.getY(), pos.getZ());
+        canvas.canvasDirection = direction;
+        canvas.dimensions = new Vector2f(width, height);
+        CanvasRegistry.getCanvases().add(canvas);
+        return canvas;
+    }
 
     public void render(WorldRenderContext context) {
         for (CanvasObject value : objects.values()) {
@@ -51,6 +66,10 @@ public class Canvas {
 
     public Vector2f get2DPosition() {
         return get2DPosition(canvasDirection);
+    }
+
+    public void addObject(String id, CanvasObject object) {
+        objects.put(id, object);
     }
 
 }
