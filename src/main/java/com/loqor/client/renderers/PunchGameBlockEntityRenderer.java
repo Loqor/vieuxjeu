@@ -9,6 +9,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.RotationAxis;
 
 import static net.minecraft.state.property.Properties.HORIZONTAL_FACING;
 
@@ -41,6 +42,8 @@ public class PunchGameBlockEntityRenderer<T extends PunchGameBlockEntity> implem
 		// TODO: Rotate based on state. 
 		// I, @Bug1312, can't visualize this without it taking so much longer than someone who just understands
 		float rot = be.getCachedState().get(TallGameBlock.HORIZONTAL_FACING).asRotation();
+
+		matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(rot));
 		
 		// If score was just set to 0 or time is after the end of the ease-out, just render the score
 		String scoreText = String.format("%03d", 
