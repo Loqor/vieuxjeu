@@ -2,6 +2,7 @@ package com.loqor.core.blocks;
 
 import com.loqor.core.VJSoundEvents;
 import com.loqor.core.blockentities.PunchGameBlockEntity;
+import com.loqor.core.entities.PunchGameEntity;
 import com.mojang.serialization.MapCodec;
 
 import net.minecraft.block.Block;
@@ -17,7 +18,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 
-public class PunchGameBlock extends TallGameBlock.RequiresToken {
+public class PunchGameBlock extends RequiresTokenBlock<PunchGameBlockEntity> {
 	
 	public static final MapCodec<PunchGameBlock> CODEC = PunchGameBlock.createCodec(PunchGameBlock::new);
 	@Override protected MapCodec<? extends BlockWithEntity> getCodec() { return CODEC; }

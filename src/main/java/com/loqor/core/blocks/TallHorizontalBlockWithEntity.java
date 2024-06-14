@@ -7,8 +7,6 @@ import java.util.function.BiFunction;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.loqor.core.blockentities.TicketReturningBlockEntity;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
@@ -20,9 +18,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateManager;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ItemActionResult;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -30,11 +25,11 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldEvents;
 import net.minecraft.world.WorldView;
 
-public abstract class TallGameBlock extends BlockWithEntity {
+public abstract class TallHorizontalBlockWithEntity<T extends BlockEntity> extends BlockWithEntity {
 
-	BiFunction<BlockPos, BlockState, ? extends TicketReturningBlockEntity> createBlockEntity;
+	BiFunction<BlockPos, BlockState, T> createBlockEntity;
 	
-	public TallGameBlock(BiFunction<BlockPos, BlockState, ? extends TicketReturningBlockEntity> createBlockEntity, Settings settings) {
+	public TallHorizontalBlockWithEntity(BiFunction<BlockPos, BlockState, T> createBlockEntity, Settings settings) {
 		super(settings);
 		this.createBlockEntity = createBlockEntity;
 		this.setDefaultState(this.stateManager.getDefaultState().with(HORIZONTAL_FACING, Direction.NORTH).with(DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER));
@@ -89,8 +84,8 @@ public abstract class TallGameBlock extends BlockWithEntity {
 	@Override
 	public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
 		if (!world.isClient) {
-			if (player.isCreative()) TallGameBlock.onBreakInCreative(world, pos, state, player);
-			else TallGameBlock.dropStacks(state, world, pos, null, player, player.getMainHandStack());
+			if (player.isCreative()) onBreakInCreative(world, pos, state, player);
+			else dropStacks(state, world, pos, null, player, player.getMainHandStack());
 		}
 		return super.onBreak(world, pos, state, player);
 	}
@@ -115,22 +110,4 @@ public abstract class TallGameBlock extends BlockWithEntity {
 		builder.add(HORIZONTAL_FACING, DOUBLE_BLOCK_HALF);
 	}
 	
-	public abstract static class RequiresToken extends TallGameBlock {
-				
-		public RequiresToken(BiFunction<BlockPos, BlockState, TicketReturningBlockEntity.RequiresToken> createBlockEntity, Settings settings) {
-			super(createBlockEntity, settings);
-		}
-
-		@Override
-		protected ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-			final BlockEntity be = world.getBlockEntity(pos);
-			if (be instanceof TicketReturningBlockEntity.RequiresToken) {
-				final TicketReturningBlockEntity.RequiresToken gameBlockEntity = (TicketReturningBlockEntity.RequiresToken) be;
-				if (gameBlockEntity.feedTokens(stack, player)) return ItemActionResult.success(world.isClient());
-			}
-			return super.onUseWithItem(stack, state, world, pos, player, hand, hit);
-		}
-
-	}
-
 }

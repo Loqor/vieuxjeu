@@ -22,7 +22,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-public class PunchGameBlockEntity extends TicketReturningBlockEntity.RequiresToken {
+public class PunchGameBlockEntity extends RequiresTokenBlockEntity implements GivesTickets {
 	
 	@Nullable
 	private UUID entityUUID;
@@ -105,7 +105,7 @@ public class PunchGameBlockEntity extends TicketReturningBlockEntity.RequiresTok
 	
 	@Override
 	protected void writeNbt(NbtCompound nbt, WrapperLookup registryLookup) {
-		super.writeNbt(nbt, registryLookup);
+		super.iWriteNbt(nbt, registryLookup);
 		if (this.entityUUID != null) nbt.putUuid(NBT_KEY_CONNECTED_ENTITY, entityUUID);
 		nbt.putInt(NBT_KEY_SCORE, this.currentValue);
 		nbt.putLong(NBT_KEY_SCORE_TICK, this.currentValueTick);
@@ -114,7 +114,7 @@ public class PunchGameBlockEntity extends TicketReturningBlockEntity.RequiresTok
 	
 	@Override
 	protected void readNbt(NbtCompound nbt, WrapperLookup registryLookup) {
-		super.readNbt(nbt, registryLookup);
+		super.iReadNbt(nbt, registryLookup);
 		if (nbt.containsUuid(NBT_KEY_CONNECTED_ENTITY)) this.entityUUID = nbt.getUuid(NBT_KEY_CONNECTED_ENTITY);
 		this.currentValue = nbt.getInt(NBT_KEY_SCORE);
 		this.currentValueTick = nbt.getLong(NBT_KEY_SCORE_TICK);
