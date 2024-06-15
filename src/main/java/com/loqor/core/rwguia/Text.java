@@ -38,4 +38,14 @@ public class Text implements CanvasObject {
     public Identifier getTexture() {
         return null;
     }
+
+    @Override
+    public void tick(float tickDelta) {
+
+    }
+
+    @Override
+    public Vector2f getScale() {
+        return null;
+    }
 }

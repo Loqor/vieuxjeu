@@ -2,6 +2,8 @@ package com.loqor.client.renderers;
 
 import com.loqor.VieuxJeu;
 import com.loqor.core.blockentities.TestBlockEntity;
+import com.loqor.core.rwguia.Canvas;
+import com.loqor.core.rwguia.Sprite;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
@@ -11,18 +13,25 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 
 import static net.minecraft.client.MinecraftClient.IS_SYSTEM_MAC;
 
 public class TestBlockEntityRenderer<T extends TestBlockEntity> implements BlockEntityRenderer<T> {
     private Framebuffer framebuffer;
-
-    public TestBlockEntityRenderer(BlockEntityRendererFactory.Context context) {}
+    public TestBlockEntityRenderer(BlockEntityRendererFactory.Context context) {
+    }
 
     @Override
     public void render(T entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+        entity.renderCanvas(matrices, vertexConsumers);
+        entity.tickCanvas(tickDelta);
+
+
         Camera camera = MinecraftClient.getInstance().gameRenderer.getCamera();
         Vec3d targetPosition = new Vec3d((float) entity.getPos().getX(),(float) entity.getPos().getY(),(float) entity.getPos().getZ());
         Vec3d transformedPosition = targetPosition.subtract(camera.getPos());

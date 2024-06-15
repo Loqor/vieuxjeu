@@ -1,10 +1,15 @@
 package com.loqor.core.rwguia;
 
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.util.math.Vector2f;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import java.util.HashMap;
@@ -34,7 +39,7 @@ public class Canvas {
 
     }
 
-    public static Canvas create(BlockPos pos, Direction direction, int width, int height) {
+    public static Canvas create(BlockPos pos, Direction direction, float width, float height) {
         Canvas canvas = new Canvas();
         canvas.position = new Vector3f(pos.getX(), pos.getY(), pos.getZ());
         canvas.canvasDirection = direction;
@@ -43,10 +48,33 @@ public class Canvas {
         return canvas;
     }
 
+    public void tick(float tickDelta) {
+        for (CanvasObject value : objects.values()) {
+            value.tick(tickDelta);
+        }
+    }
+
     public void render(WorldRenderContext context) {
         for (CanvasObject value : objects.values()) {
             value.render(context, this);
         }
+    }
+
+    public void render(MatrixStack stack, VertexConsumerProvider provider) {
+        for (CanvasObject value : objects.values()) {
+            value.render(stack, provider, this);
+        }
+        stack.push();
+        stack.translate(dimensions.getX(), 0, 0);
+        stack.scale(0.05f, 2f, 0);
+        VertexConsumer buffer = provider.getBuffer(RenderLayer.getDebugQuads());
+        MatrixStack.Entry entry = stack.peek();
+        Matrix4f matrix4f = entry.getPositionMatrix();
+        CanvasObject.vertex(buffer, matrix4f, entry, -1f, -1f,255, 255, 255, 255, 0, 1, 15728880);
+        CanvasObject.vertex(buffer, matrix4f, entry, 1f, -1f, 255, 255, 255, 255, 1, 1, 15728880);
+        CanvasObject.vertex(buffer, matrix4f, entry, 1f, 1f, 255, 255, 255, 255, 1, 0, 15728880);
+        CanvasObject.vertex(buffer, matrix4f, entry, -1f, 1f, 255, 255, 255, 255, 0, 0, 15728880);
+        stack.pop();
     }
 
     public void setPosition(Vector3f position) {

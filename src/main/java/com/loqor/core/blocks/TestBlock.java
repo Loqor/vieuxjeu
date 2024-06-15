@@ -44,10 +44,6 @@ public class TestBlock extends BlockWithEntity {
         if(world.getBlockEntity(pos) instanceof TestBlockEntity testBlockEntity) {
             testBlockEntity.onUse(state, world, pos, player, hit);
         }
-        Canvas canvas = Canvas.create(pos.up(), Direction.EAST, 500, 500);
-        Sprite testSprite = new Sprite(Identifier.of("stone"));
-        testSprite.setPosition(new Vector2f(1, 1));
-        canvas.addObject("test_object",testSprite);
         return super.onUse(state, world, pos, player, hit);
     }
 }
