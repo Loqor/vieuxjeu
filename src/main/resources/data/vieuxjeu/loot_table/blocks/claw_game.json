@@ -1,0 +1,30 @@
+{
+	"type": "minecraft:block",
+	"pools": [
+		{
+			"rolls": 1,
+			"bonus_rolls": 0,
+			"entries": [
+				{
+					"type": "minecraft:item",
+					"name": "vieuxjeu:claw_game",
+					"conditions": [
+						{
+							"condition": "minecraft:block_state_property",
+							"block": "vieuxjeu:claw_game",
+							"properties": {
+								"piece": "1"
+							}
+						}
+					]
+				}
+			],
+			"conditions": [
+				{
+					"condition": "minecraft:survives_explosion"
+				}
+			]
+		}
+	],
+	"random_sequence": "vieuxjeu:claw_game"
+}

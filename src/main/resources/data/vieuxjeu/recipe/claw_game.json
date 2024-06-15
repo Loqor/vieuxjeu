@@ -1,0 +1,30 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"category": "redstone",
+	"pattern": [
+		"WWW",
+		"GIG",
+		"SRS"
+	],
+	"key": {
+		"S": {
+			"item": "minecraft:stone"
+		},
+		"G": {
+			"item": "minecraft:glass_pane"
+		},
+		"I": {
+			"item": "minecraft:iron_nugget"
+		},
+		"W": {
+			"tag": "minecraft:wooden_slabs"
+		},
+		"R": {
+			"item": "minecraft:redstone"
+		}
+	},
+	"result": {
+		"id": "vieuxjeu:claw_game",
+		"count": 1
+	}
+}
