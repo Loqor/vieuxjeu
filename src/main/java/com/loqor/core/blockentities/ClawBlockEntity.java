@@ -1,9 +1,12 @@
 package com.loqor.core.blockentities;
 
+import static net.minecraft.state.property.Properties.HORIZONTAL_FACING;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.loqor.core.VJBlockEntityTypes;
+import com.loqor.core.VJBlocks;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -104,6 +107,16 @@ public class ClawBlockEntity extends TicketReturningBlockEntity.RequiresToken im
 			this.collectedItem = ItemStack.EMPTY;
 
 		this.collectedItemTick = nbt.getLong(NBT_KEY_COLLECTED_ITEM_TICK);
+	}
+	
+	@Override
+	public void markDirty() {
+		super.markDirty();
+		if (getCachedState().contains(HORIZONTAL_FACING)) {
+			BlockPos otherSide = pos.offset(getCachedState().get(HORIZONTAL_FACING).rotateYCounterclockwise());
+			if (this.world.getBlockState(pos).getBlock() == getCachedState().getBlock())
+				this.world.updateComparators(otherSide, VJBlocks.CLAW);
+		}
 	}
 
 	@Override

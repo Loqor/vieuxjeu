@@ -43,7 +43,6 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldEvents;
 
 public class ClawBlock extends BlockWithEntity implements InventoryProvider {
 
@@ -73,9 +72,9 @@ public class ClawBlock extends BlockWithEntity implements InventoryProvider {
 		this.setDefaultState(this.stateManager.getDefaultState().with(HORIZONTAL_FACING, Direction.NORTH).with(CLAW_PIECE, 1));
 	}
 
-	// ==========================
+	// ===============================
 	// Section: Setup Methods
-	// ==========================
+	// ===============================
 
 	@Override
 	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
@@ -97,9 +96,9 @@ public class ClawBlock extends BlockWithEntity implements InventoryProvider {
 		return VoxelShapes.empty();
 	}
 
-	// ==========================
+	// ===============================
 	// Section: Helper Methods
-	// ==========================
+	// ===============================
 
 	@Nullable
 	private ClawBlockEntity getBlockEntityIfBottom(BlockState state, WorldAccess world, BlockPos pos) {
@@ -132,14 +131,14 @@ public class ClawBlock extends BlockWithEntity implements InventoryProvider {
 		// 1 2
 		switch (part) {
 			case 1:
+				addIfPart.accept(pos, new int[] { 1, 0}, 2);
 				addIfPart.accept(pos, new int[] { 0, 1}, 3);
 				addIfPart.accept(pos, new int[] { 1, 1}, 4);
-				addIfPart.accept(pos, new int[] { 1, 0}, 2);
 				break;
 			case 2:
-				addIfPart.accept(pos, new int[] { 0, 1}, 4);
-				addIfPart.accept(pos, new int[] {-1, 1}, 3);
 				addIfPart.accept(pos, new int[] {-1, 0}, 1);
+				addIfPart.accept(pos, new int[] {-1, 1}, 3);
+				addIfPart.accept(pos, new int[] { 0, 1}, 4);
 				break;
 			case 3:
 				addIfPart.accept(pos, new int[] { 0,-1}, 1);
@@ -147,8 +146,8 @@ public class ClawBlock extends BlockWithEntity implements InventoryProvider {
 				addIfPart.accept(pos, new int[] { 1, 0}, 4);
 				break;
 			case 4:
-				addIfPart.accept(pos, new int[] { 0,-1}, 2);
 				addIfPart.accept(pos, new int[] {-1,-1}, 1);
+				addIfPart.accept(pos, new int[] { 0,-1}, 2);
 				addIfPart.accept(pos, new int[] {-1, 0}, 3);
 				break;
 		}
@@ -156,9 +155,9 @@ public class ClawBlock extends BlockWithEntity implements InventoryProvider {
 		return positions;
 	}
 
-	// ==========================
+	// ===============================
 	// Section: Game Mechanic Methods
-	// ==========================
+	// ===============================
 
 	@Override
 	protected ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
@@ -179,14 +178,14 @@ public class ClawBlock extends BlockWithEntity implements InventoryProvider {
 		final BlockEntity be = world.getBlockEntity(pos);
 		if (be != null && be instanceof final ClawBlockEntity claw && claw.isActive()) {
 			final Direction dir = state.getOrEmpty(HORIZONTAL_FACING).orElse(Direction.NORTH);
-			ItemDispenserBehavior.spawnItem(world, claw.collectedItem, 6, dir, pos.toCenterPos().offset(dir, 0.8F));
+			ItemDispenserBehavior.spawnItem(world, claw.collectedItem, 6, dir, pos.toCenterPos().offset(dir, 0.8F).offset(dir.rotateYCounterclockwise(), 0.5F));
 			claw.deactivate();
 		}
 	}
 
-	// ==========================
+	// ===============================
 	// Section: Comparator Methods
-	// ==========================
+	// ===============================
 
 	@Override
 	public SidedInventory getInventory(BlockState state, WorldAccess world, BlockPos pos) {
@@ -201,13 +200,12 @@ public class ClawBlock extends BlockWithEntity implements InventoryProvider {
 
 	@Override
 	protected int getComparatorOutput(BlockState state, World world, BlockPos pos) {
-		if (state.get(CLAW_PIECE) == 1)	world.updateComparators(pos.offset(state.get(HORIZONTAL_FACING).rotateYCounterclockwise()), this);
 		return ScreenHandler.calculateComparatorOutput((BlockEntity) getBlockEntityIfBottom(state, world, pos));
 	}
 
-	// ==========================
+	// ===============================
 	// Section: Multi-Block Methods
-	// ==========================
+	// ===============================
 
 	@Override @Nullable
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
@@ -258,16 +256,27 @@ public class ClawBlock extends BlockWithEntity implements InventoryProvider {
 		}
 	}
 
-	
-	// FIXME: Drops are still coming up
 	@Override
 	public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
 		if (!world.isClient()) {
-			if (player.isCreative()) getNeighborsPos(world, pos, state, false).forEach(newPos -> {
-				world.setBlockState(newPos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
-				world.syncWorldEvent(player, WorldEvents.BLOCK_BROKEN, newPos, Block.getRawIdFromState(state));
-			}); 
-			else Block.dropStacks(state, world, pos, null, player, player.getMainHandStack());
+			if (player.isCreative() && state.get(CLAW_PIECE) != 1) {
+				Collection<BlockPos> allPos = getNeighborsPos(world, pos, state, true);
+				/**
+				 * Note by @Bug1312:
+				 * Block.NOTIFY_ALL would activate getStateForNeighborUpdate before it got to the next pos.
+				 * This would mean it removed the rest of the blocks without consideration of the next 
+				 * 	pos's set with Block.SKIP_DROPS (when appended)
+				 * Minecraft's blocks like doors and beds don't have this issue since it's only one block,
+				 * 	multiblocks like tall doors that I have worked on in the past don't have this issue either
+				 * 	because each piece is only next to one other piece, not two, which this 2x2 mutliblock is.
+				 * Forcing it as VOID_AIR and then normal setting as AIR fixes the issue, however it's 
+				 * 	definitely a band-aid solution as VOID_AIR's getStateForNeighborUpdate is called.
+				 * I fail to believe there isn't a better way but I have been hung on this issue for quite a long
+				 * 	time and this is an event with a time limit.
+				 */
+				for (BlockPos newPos : allPos) world.setBlockState(newPos, Blocks.VOID_AIR.getDefaultState(), Block.FORCE_STATE);
+				for (BlockPos newPos : allPos) world.setBlockState(newPos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
+			} 
 		}
 		return super.onBreak(world, pos, state, player);
 	}
