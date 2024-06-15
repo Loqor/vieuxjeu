@@ -258,9 +258,11 @@ public class ClawBlock extends BlockWithEntity implements InventoryProvider {
 		}
 	}
 
+	
+	// FIXME: Drops are still coming up
 	@Override
 	public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-		if (!world.isClient) {
+		if (!world.isClient()) {
 			if (player.isCreative()) getNeighborsPos(world, pos, state, false).forEach(newPos -> {
 				world.setBlockState(newPos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
 				world.syncWorldEvent(player, WorldEvents.BLOCK_BROKEN, newPos, Block.getRawIdFromState(state));

@@ -26,7 +26,8 @@
 			"com.loqor.client.VJModClient"
 		],
 		"fabric-datagen": [
-			"com.loqor.VieuxJeuDataGenerator"
+			"com.loqor.VieuxJeuDataGenerator",
+			"com.loqor.datagen.GameBlockDataGenerator"
 		]
 	},
 	"mixins": [

@@ -9,12 +9,14 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 
 public class VJBlocks {
@@ -37,5 +39,12 @@ public class VJBlocks {
 
     public static final TestBlock TEST_BLOCK = register(new TestBlock(AbstractBlock.Settings.create().sounds(BlockSoundGroup.ANVIL)), "test_block", true);
     public static final PunchGameBlock PUNCH_GAME = register(new PunchGameBlock(AbstractBlock.Settings.create().sounds(BlockSoundGroup.ANVIL)), "punch_game", true);
-    public static final ClawBlock CLAW = register(new ClawBlock(AbstractBlock.Settings.create().sounds(BlockSoundGroup.ANVIL)), "claw_game", true);
+	
+    public static final ClawBlock CLAW = register(new ClawBlock(AbstractBlock.Settings.create()
+    		.mapColor(DyeColor.LIGHT_GRAY)
+    		.strength(5.0f, 6.0f)
+    		.requiresTool()
+    		.sounds(BlockSoundGroup.METAL)
+			.pistonBehavior(PistonBehavior.IGNORE)
+		), "claw_game", true);
 }
