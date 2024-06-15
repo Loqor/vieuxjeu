@@ -3,7 +3,11 @@ package com.loqor.core;
 import com.loqor.VieuxJeu;
 import com.loqor.core.blocks.ClawBlock;
 import com.loqor.core.blocks.PunchGameBlock;
+import com.loqor.core.blocks.TallGameBlock;
 import com.loqor.core.blocks.TestBlock;
+import com.loqor.datagen.GameBlockDataGenProvider;
+import com.loqor.datagen.TallBlockDataGenProvider;
+
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.AbstractBlock;
@@ -33,7 +37,10 @@ public class VJBlocks {
                 entries.add(block.asItem());
             });
         }
-
+        
+        if (block instanceof TallGameBlock) TallBlockDataGenProvider.TWO_TALL_BLOCKS.add(block);
+        GameBlockDataGenProvider.GAME_BLOCKS.add(block);
+        
         return Registry.register(Registries.BLOCK, blockId, block);
     }
 
